@@ -1,0 +1,50 @@
+group 'com.demoWS'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url "http://clojars.org/repo" }
+    maven { url "http://repository.cloudera.com/artifactory/cloudera-repos/"}
+}
+
+mainClassName = 'com.demoWS.app.DemoApp'
+
+project.ext {
+    dropwizardVersion = "0.7.0"
+}
+
+dependencies {
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'io.dropwizard:dropwizard-testing:' + dropwizardVersion
+    compile group: 'commons-collections' , name: 'commons-collections' , version: '3.2'
+
+    compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion
+    compile 'io.dropwizard:dropwizard-jdbi:' +dropwizardVersion
+    compile 'io.dropwizard:dropwizard-assets:'+ dropwizardVersion
+
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.3'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.1.2'
+}
+
+
+run {
+    args 'server', 'app_config.yml'
+}
+
+jar {
+    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    manifest { attributes 'Main-Class': 'com.demoWS.app.DemoApp' }
+}

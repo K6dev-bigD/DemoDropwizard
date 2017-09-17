@@ -1,0 +1,6 @@
+titanGraphConfig:
+  storageBackend: 'hbase'
+  storagePort: '2181'
+  storageHbaseTable: 'ProductGraph'
+  strorageHostName: '10.10.20.52'
+
